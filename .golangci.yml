@@ -1,0 +1,103 @@
+# golangci-lint configuration file
+run:
+  # Timeout for the entire golangci-lint run, default is 1m
+  timeout: 5m
+  # Which directories to skip for all linters
+  skip-dirs:
+    - vendor
+    - node_modules
+    - generated
+
+# Configure enabled and disabled linters
+linters:
+  enable-all: false
+  disable-all: true
+  enable:
+    - govet
+    - errcheck
+    - staticcheck
+    - gofmt
+    - goimports
+    - gocyclo
+    - golint
+    - ineffassign
+    - deadcode
+    - varcheck
+    - structcheck
+    - unused
+    - gosimple
+    - stylecheck
+    - unconvert
+    - misspell
+    - goconst
+    - nakedret
+    - gosec
+    - typecheck
+    - bodyclose
+    - depguard
+    - dogsled
+    - dupl
+    - exhaustivestruct
+    - funlen
+    - gocognit
+    - gocritic
+    - gochecknoinits
+    - gochecknoglobals
+    - gofmt
+    - goimports
+    - gomnd
+    - goprintffuncname
+    - gosec
+    - gocritic
+    - godox
+    - maligned
+    - prealloc
+    - scopelint
+    - whitespace
+    - wsl
+
+# Linter specific configurations
+linters-settings:
+  gocyclo:
+    min-complexity: 10
+  dupl:
+    threshold: 100
+  goconst:
+    min-len: 3
+    min-occurrences: 2
+  misspell:
+    locale: US
+  errcheck:
+    check-type-assertions: true
+  exhaustivestruct:
+    ignore-patterns: ^.*(JSON|Proto)$
+
+# Define custom build tags and environment variables for linter
+build-tags:
+  - integration
+env:
+  # Custom environment variables for linters
+  GOFLAGS: "-mod=vendor"
+
+issues:
+  # Exclude certain issues by text pattern
+  exclude:
+    - "Error return value of .((os\\.|io\\.|ioutil\\.|bytes\\.|strings\\.|strconv\\.|fmt\\.|encoding/json\\.|encoding/xml\\.|encoding/csv\\.).*)?\\w+\\.(Close|Write|Flush|Stop|Sync|Cancel|Release|Unlock|Shutdown|Cleanup|Lock|Unlock|RemoveAll|Wait|Kill|Interrupt|Pause|Terminate|Unpause)\\(.+\\)\\) is not checked"
+  # Exclude generated code files
+  exclude-rules:
+    - path: _generated
+      linters:
+        - gofmt
+        - goimports
+  # Skip certain linters for certain paths
+  skip-files:
+    - _test.go$
+
+output:
+  # Sort issues by filename
+  sort-results: true
+
+# Configure caching
+cache:
+  # Directory to cache results
+  dir: ~/.cache/golangci-lint
